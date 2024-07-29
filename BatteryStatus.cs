@@ -1,6 +1,8 @@
-namespace ParadigmShift
+using System.Collections.Generic;
+
+namespace paradigm_shift_csharp
 {
-    public class BatteryStatus
+    class BatteryStatus
     {
         private readonly List<string> messages = new List<string>();
 
