@@ -61,14 +61,19 @@ Shorten the Semantic distance
 - Apect oriented to capture repeating aspects
 
   
-## Extension 1: Early Warning
+## Extensions Implemented
 
-Customers need early warnings to take action, in addition to the alarm that you print after the limit is breached. Introduce a 'warning' level with a tolerance of 5% of the upper-limit.
+### Extension 1: Early Warning
+Implemented early warning levels for Temperature, State of Charge (SoC), and Charge Rate parameters with a tolerance of 5% of the upper limit. The warning messages are displayed as follows:
 
-Example: If the SoC needs to be between 20 and 80, the warning-tolerance is 5% of 80 = 4. Warnings need to be displayed in these ranges:
+- Temperature:
+  - Below 0 to 0 + 2.25: "Warning: Approaching discharge"
+  - Above 45 - 2.25 to 45: "Warning: Approaching charge-peak"
+- State of Charge (SoC):
+  - Below 20 to 20 + 4: "Warning: Approaching discharge"
+  - Above 80 - 4 to 80: "Warning: Approaching charge-peak"
+- Charge Rate:
+  - Above 0.8 - 0.04 to 0.8: "Warning: Approaching charge-peak"
 
-20 to 20+4 Warning: Approaching discharge
-80-4 to 80 Warning: Approaching charge-peak
-Same for Temperature and Charge-rate.
+This allows for early detection and warnings to prevent parameters from reaching critical levels.
 
-Keep in mind: Though we are starting with warning levels for all parameters, customers may give feedback to have warnings only for some parameters and not others. Minimize the change needed for such 'tuning'.
