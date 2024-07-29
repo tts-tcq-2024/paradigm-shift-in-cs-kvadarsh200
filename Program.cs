@@ -1,8 +1,8 @@
 using System;
 
-namespace ParadigmShift
+namespace paradigm_shift_csharp
 {
-  class Program
+    class Program
     {
         static int Main()
         {
