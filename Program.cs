@@ -2,9 +2,29 @@ using System;
 
 namespace ParadigmShift
 {
-    class Program
+  class Program
     {
-        // Check if the expression is true, otherwise throw an error
+        static int Main()
+        {
+            // Set the language to German for this example
+            Localization.SetLanguage("DE");
+
+            BatteryStatus batteryStatus = new BatteryStatus();
+
+            Checker checker = new Checker();
+            checker.AddParameter(new Parameter("Temperature", 0, 45, 5, batteryStatus));
+            checker.AddParameter(new Parameter("SoC", 20, 80, 5, batteryStatus));
+            checker.AddParameter(new Parameter("Charge Rate", 0, 0.8f, 5, batteryStatus));
+
+            ExpectTrue(checker.CheckBattery(25, 70, 0.7f));
+            ExpectFalse(checker.CheckBattery(50, 85, 0.9f));
+
+            batteryStatus.PrintMessages();
+
+            Console.WriteLine("All ok");
+            return 0;
+        }
+
         static void ExpectTrue(bool expression)
         {
             if (!expression)
@@ -14,7 +34,6 @@ namespace ParadigmShift
             }
         }
 
-        // Check if the expression is false, otherwise throw an error
         static void ExpectFalse(bool expression)
         {
             if (expression)
@@ -22,26 +41,6 @@ namespace ParadigmShift
                 Console.WriteLine("Expected false, but got true");
                 Environment.Exit(1);
             }
-        }
-
-        static int Main()
-        {
-            // Setting language to English for these tests
-            GlobalSettings.AppLanguage = Language.English;
-            
-            // Test cases in English
-            ExpectTrue(Checker.BatteryIsOk(25, 70, 0.7f));
-            ExpectFalse(Checker.BatteryIsOk(50, 85, 0.0f));
-
-            // Setting language to German for these tests
-            GlobalSettings.AppLanguage = Language.German;
-            
-            // Test cases in German
-            ExpectTrue(Checker.BatteryIsOk(25, 70, 0.7f));
-            ExpectFalse(Checker.BatteryIsOk(50, 85, 0.0f));
-
-            Console.WriteLine("All tests passed.");
-            return 0;
         }
     }
 }
