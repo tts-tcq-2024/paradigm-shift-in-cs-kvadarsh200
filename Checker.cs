@@ -1,8 +1,8 @@
-using System;
+using System.Collections.Generic;
 
-namespace ParadigmShift
+namespace paradigm_shift_csharp
 {
-    public class checker
+    class Checker
     {
         private readonly List<Parameter> parameters = new List<Parameter>();
 
