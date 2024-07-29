@@ -1,6 +1,6 @@
 namespace paradigm_shift_csharp
 {
-    class Parameter
+    public class Parameter
     {
         private readonly string name;
         private readonly float lowerLimit;
