@@ -1,6 +1,6 @@
 using System;
-using System.Diagnostics;
-namespace paradigm_shift_csharp
+
+namespace ParadigmShift
 {
     public enum StatusType
     {
@@ -8,43 +8,38 @@ namespace paradigm_shift_csharp
         Warning,
         Breach
     }
-public class Checker
-{
-   static StatusType CheckTemperatureStatus(float temperature)
+
+    public class checker
+    {
+        private static StatusType GetStatus(float value, float lowerLimit, float upperLimit)
         {
-            if (temperature < 0)
+            float lowerWarningThreshold = lowerLimit + upperLimit * GlobalSettings.WarningTolerance;
+            float upperWarningThreshold = upperLimit - upperLimit * GlobalSettings.WarningTolerance;
+
+            if (value < lowerLimit || value > upperLimit)
+            {
                 return StatusType.Breach;
-            else if (temperature >= 0 && temperature <= (0 + 45 * GlobalSettings.WarningTolerance))
+            }
+            else if (value <= lowerWarningThreshold || value >= upperWarningThreshold)
+            {
                 return StatusType.Warning;
-            else if (temperature > 45)
-                return StatusType.Breach;
-            else if (temperature > (45 - 45 * GlobalSettings.WarningTolerance) && temperature <= 45)
-                return StatusType.Warning;
-            return StatusType.Normal;
-        }
-     static StatusType CheckSocStatus(float soc)
-        {
-            float upperLimit = 80;
-            float lowerLimit = 20;
-            if (soc < lowerLimit)
-                return StatusType.Breach;
-            else if (soc >= lowerLimit && soc <= (lowerLimit + upperLimit * GlobalSettings.WarningTolerance))
-                return StatusType.Warning;
-            else if (soc > upperLimit)
-                return StatusType.Breach;
-            else if (soc > (upperLimit - upperLimit * GlobalSettings.WarningTolerance) && soc <= upperLimit)
-                return StatusType.Warning;
+            }
             return StatusType.Normal;
         }
 
-        static StatusType CheckChargeRateStatus(float chargeRate)
+        public static StatusType CheckTemperatureStatus(float temperature)
         {
-            float upperLimit = 0.8f;
-            if (chargeRate > upperLimit)
-                return StatusType.Breach;
-            else if (chargeRate > (upperLimit - upperLimit * GlobalSettings.WarningTolerance) && chargeRate <= upperLimit)
-                return StatusType.Warning;
-            return StatusType.Normal;
+            return GetStatus(temperature, 0, 45);
+        }
+
+        public static StatusType CheckSocStatus(float soc)
+        {
+            return GetStatus(soc, 20, 80);
+        }
+
+        public static StatusType CheckChargeRateStatus(float chargeRate)
+        {
+            return GetStatus(chargeRate, 0, 0.8f);
         }
 
         public static void CheckTemperature(float temperature)
@@ -77,6 +72,5 @@ public class Checker
                     CheckSocStatus(soc) == StatusType.Normal &&
                     CheckChargeRateStatus(chargeRate) == StatusType.Normal);
         }
-    
-}
+    }
 }
