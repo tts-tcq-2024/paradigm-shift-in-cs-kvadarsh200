@@ -1,3 +1,5 @@
+using ParadigmShift;
+
 namespace ParadigmShift
 {
     public static class MessageHelper
@@ -34,7 +36,7 @@ namespace ParadigmShift
         public static string GetChargeRateMessage(StatusType status)
         {
             string warningMessage = GlobalSettings.AppLanguage == Language.English ? "Approaching charge rate limit!" : "Annäherung an die Ladegrenze!";
-            string breachMessage = GlobalSettings.AppLanguage == Language.English ? "Charge Rate is out of range  
+            string breachMessage = GlobalSettings.AppLanguage == Language.English ? "Charge Rate is out of range!" : "Laderate ist außerhalb des Bereichs!";
 
             return GetMessage(status, warningMessage, breachMessage);
         }
