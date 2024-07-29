@@ -1,9 +1,6 @@
-using ParadigmShift;
-
-namespace ParadigmShift
+namespace paradigm_shift_csharp
 {
-    
-class Parameter
+    class Parameter
     {
         private readonly string name;
         private readonly float lowerLimit;
