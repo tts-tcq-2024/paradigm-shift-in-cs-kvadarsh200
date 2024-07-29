@@ -4,7 +4,7 @@ namespace paradigm_shift_csharp
 {
     class Checker
     {
-        private readonly List<Parameter> parameters = new List<Parameter>();
+        private List<Parameter> parameters = new List<Parameter>();
 
         public void AddParameter(Parameter parameter)
         {
