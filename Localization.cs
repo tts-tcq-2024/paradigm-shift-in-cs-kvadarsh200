@@ -1,7 +1,8 @@
+using System.Collections.Generic;
 
-namespace ParadigmShift
+namespace paradigm_shift_csharp
 {
-static class Localization
+    static class Localization
     {
         private static string language = "EN";
         private static readonly Dictionary<string, Dictionary<string, string>> messages = new Dictionary<string, Dictionary<string, string>>
