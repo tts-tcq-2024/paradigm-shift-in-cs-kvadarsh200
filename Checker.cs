@@ -17,21 +17,14 @@ namespace paradigm_shift_csharp
         static bool CheckTemperature(float temperature)
         {
             bool status = true;
-            if (temperature < TempLowerLimit || temperature > TempUpperLimit)
+            if (IsOutOfRange(temperature, TempLowerLimit, TempUpperLimit))
             {
                 Console.WriteLine("Temperature is out of range!");
                 status = false;
             }
             else
             {
-                if (temperature <= TempLowerLimit + TempWarningTolerance)
-                {
-                    Console.WriteLine("Warning: Approaching discharge");
-                }
-                if (temperature >= TempUpperLimit - TempWarningTolerance)
-                {
-                    Console.WriteLine("Warning: Approaching charge-peak");
-                }
+                PrintWarning(temperature, TempLowerLimit, TempUpperLimit, TempWarningTolerance, "Temperature");
             }
             return status;
         }
@@ -39,21 +32,14 @@ namespace paradigm_shift_csharp
         static bool CheckSoc(float soc)
         {
             bool status = true;
-            if (soc < SocLowerLimit || soc > SocUpperLimit)
+            if (IsOutOfRange(soc, SocLowerLimit, SocUpperLimit))
             {
                 Console.WriteLine("State of Charge is out of range!");
                 status = false;
             }
             else
             {
-                if (soc <= SocLowerLimit + SocWarningTolerance)
-                {
-                    Console.WriteLine("Warning: Approaching discharge");
-                }
-                if (soc >= SocUpperLimit - SocWarningTolerance)
-                {
-                    Console.WriteLine("Warning: Approaching charge-peak");
-                }
+                PrintWarning(soc, SocLowerLimit, SocUpperLimit, SocWarningTolerance, "State of Charge");
             }
             return status;
         }
@@ -66,14 +52,28 @@ namespace paradigm_shift_csharp
                 Console.WriteLine("Charge Rate is out of range!");
                 status = false;
             }
-            else
+            else if (chargeRate >= ChargeRateUpperLimit - ChargeRateWarningTolerance)
             {
-                if (chargeRate >= ChargeRateUpperLimit - ChargeRateWarningTolerance)
-                {
-                    Console.WriteLine("Warning: Approaching charge-peak");
-                }
+                Console.WriteLine("Warning: Approaching charge-peak");
             }
             return status;
+        }
+
+        static bool IsOutOfRange(float value, float lowerLimit, float upperLimit)
+        {
+            return value < lowerLimit || value > upperLimit;
+        }
+
+        static void PrintWarning(float value, float lowerLimit, float upperLimit, float tolerance, string parameterName)
+        {
+            if (value <= lowerLimit + tolerance)
+            {
+                Console.WriteLine($"Warning: {parameterName} approaching discharge");
+            }
+            if (value >= upperLimit - tolerance)
+            {
+                Console.WriteLine($"Warning: {parameterName} approaching charge-peak");
+            }
         }
 
         static bool batteryIsOk(float temperature, float soc, float chargeRate)
