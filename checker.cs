@@ -2,61 +2,81 @@ using System;
 using System.Diagnostics;
 namespace paradigm_shift_csharp
 {
-class Checker
+    public enum StatusType
+    {
+        Normal,
+        Warning,
+        Breach
+    }
+public class Checker
 {
-    static bool CheckTemperature(float temperature)
-    {
-        if (temperature < 0 || temperature > 45)
+   static StatusType CheckTemperatureStatus(float temperature)
         {
-            Console.WriteLine("Temperature is out of range!");
-            return false;
+            if (temperature < 0)
+                return StatusType.Breach;
+            else if (temperature >= 0 && temperature <= (0 + 45 * GlobalSettings.WarningTolerance))
+                return StatusType.Warning;
+            else if (temperature > 45)
+                return StatusType.Breach;
+            else if (temperature > (45 - 45 * GlobalSettings.WarningTolerance) && temperature <= 45)
+                return StatusType.Warning;
+            return StatusType.Normal;
         }
-        return true;
-    }
-
-    static bool CheckSoc(float soc)
-    {
-        if (soc < 20 || soc > 80)
+     static StatusType CheckSocStatus(float soc)
         {
-            Console.WriteLine("State of Charge is out of range!");
-            return false;
+            float upperLimit = 80;
+            float lowerLimit = 20;
+            if (soc < lowerLimit)
+                return StatusType.Breach;
+            else if (soc >= lowerLimit && soc <= (lowerLimit + upperLimit * GlobalSettings.WarningTolerance))
+                return StatusType.Warning;
+            else if (soc > upperLimit)
+                return StatusType.Breach;
+            else if (soc > (upperLimit - upperLimit * GlobalSettings.WarningTolerance) && soc <= upperLimit)
+                return StatusType.Warning;
+            return StatusType.Normal;
         }
-        return true;
-    }
 
-    static bool CheckChargeRate(float chargeRate)
-    {
-        if (chargeRate > 0.8)
+        static StatusType CheckChargeRateStatus(float chargeRate)
         {
-            Console.WriteLine("Charge Rate is out of range!");
-            return false;
+            float upperLimit = 0.8f;
+            if (chargeRate > upperLimit)
+                return StatusType.Breach;
+            else if (chargeRate > (upperLimit - upperLimit * GlobalSettings.WarningTolerance) && chargeRate <= upperLimit)
+                return StatusType.Warning;
+            return StatusType.Normal;
         }
-        return true;
-    }
 
-    static bool batteryIsOk(float temperature, float soc, float chargeRate)
-    {
-                return CheckTemperature(temperature) && CheckSoc(soc) && CheckChargeRate(chargeRate);
-    }
-    
-    static void ExpectTrue(bool expression) {
-        if(!expression) {
-            Console.WriteLine("Expected true, but got false");
-            Environment.Exit(1);
+        public static void CheckTemperature(float temperature)
+        {
+            var status = CheckTemperatureStatus(temperature);
+            if (status != StatusType.Normal)
+                Console.WriteLine(MessageHelper.GetTemperatureMessage(status));
         }
-    }
-    static void ExpectFalse(bool expression) {
-        if(expression) {
-            Console.WriteLine("Expected false, but got true");
-            Environment.Exit(1);
+
+        public static void CheckSoc(float soc)
+        {
+            var status = CheckSocStatus(soc);
+            if (status != StatusType.Normal)
+                Console.WriteLine(MessageHelper.GetSocMessage(status));
         }
-    }
-    static int Main() {
-        ExpectTrue(batteryIsOk(25, 70, 0.7f));
-        ExpectFalse(batteryIsOk(50, 85, 0.0f));
-        Console.WriteLine("All ok");
-        return 0;
-    }
+
+        public static void CheckChargeRate(float chargeRate)
+        {
+            var status = CheckChargeRateStatus(chargeRate);
+            if (status != StatusType.Normal)
+                Console.WriteLine(MessageHelper.GetChargeRateMessage(status));
+        }
+
+        public static bool BatteryIsOk(float temperature, float soc, float chargeRate)
+        {
+            CheckTemperature(temperature);
+            CheckSoc(soc);
+            CheckChargeRate(chargeRate);
+            return (CheckTemperatureStatus(temperature) == StatusType.Normal &&
+                    CheckSocStatus(soc) == StatusType.Normal &&
+                    CheckChargeRateStatus(chargeRate) == StatusType.Normal);
+        }
     
 }
 }
