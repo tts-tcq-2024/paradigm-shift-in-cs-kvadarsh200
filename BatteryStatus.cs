@@ -1,4 +1,6 @@
-class BatteryStatus
+namespace ParadigmShift
+{
+    public class BatteryStatus
     {
         private readonly List<string> messages = new List<string>();
 
@@ -15,3 +17,4 @@ class BatteryStatus
             }
         }
     }
+}
