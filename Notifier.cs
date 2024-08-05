@@ -1,9 +1,17 @@
 using System;
+using System.Collections.Generic;
 
 namespace paradigm_shift_csharp
 {
     class Notifier
     {
+        private static readonly Dictionary<string, float> Tolerances = new Dictionary<string, float>
+        {
+            { "Temperature", Constants.TempWarningTolerance },
+            { "State of Charge", Constants.SocWarningTolerance },
+            { "Charge Rate", Constants.ChargeRateWarningTolerance }
+        };
+
         public void PrintWarning(float value, float lowerLimit, float upperLimit, string parameterName)
         {
             float tolerance = GetTolerance(parameterName);
@@ -19,13 +27,11 @@ namespace paradigm_shift_csharp
 
         private float GetTolerance(string parameterName)
         {
-            switch (parameterName)
+            if (Tolerances.TryGetValue(parameterName, out float tolerance))
             {
-                case "Temperature": return Constants.TempWarningTolerance;
-                case "State of Charge": return Constants.SocWarningTolerance;
-                case "Charge Rate": return Constants.ChargeRateWarningTolerance;
-                default: throw new ArgumentException("Unknown parameter name");
+                return tolerance;
             }
+            throw new ArgumentException("Unknown parameter name");
         }
     }
 }
