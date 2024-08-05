@@ -8,4 +8,14 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Compile Include="Checker.cs" />
+    <Compile Include="Constants.cs" />
+    <Compile Include="IWarningLogger.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="RangeChecker.cs" />
+    <Compile Include="TestWarningLogger.cs" />
+    <Compile Include="WarningPrinter.cs" />
+  </ItemGroup>
+
 </Project>
